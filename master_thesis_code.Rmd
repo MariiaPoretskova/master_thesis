@@ -13,7 +13,6 @@ library(readxl)
 library(tidyverse)
 library(magrittr)
 library(tidyr)
-library(stargazer)
 library(dplyr)  
 
 ```
@@ -33,94 +32,95 @@ Summary statistics
 ```{r}
 
 summary_data <- summary(data)
-print(summary_data)
+summary_data
 
 gender_table <- table(data$gender)
-print(gender_table)
+gender_table
+
 gender_percentages <- prop.table(gender_table)
-print(gender_percentages)
+gender_percentages
 
 ```
 
 *Welch's two-sample t-tests:*
 
-Comparison of donations to each cause under *positive vs negative treatments*
+Comparison of donations to each cause under positive vs negative treatments
 ```{r}
 #Rebuilding cause
 pos_rebuilding <- data[data$treatment != "Drama Theater" & data$treatment != "Ukraine Shelling", "rebuilding"]
 neg_rebuilding <- data[data$treatment != "Kherson Liberation" & data$treatment != "Release of POWs", "rebuilding"]
-t_test_result <- t.test(pos_rebuilding, neg_rebuilding)
-print(t_test_result)
+t_test_result_rebuilding <- t.test(pos_rebuilding, neg_rebuilding)
+t_test_result_rebuilding
 
 #Keep money for yourself option
 pos_keep <- data[data$treatment != "Drama Theater" & data$treatment != "Ukraine Shelling", "keep"]
 neg_keep <- data[data$treatment != "Kherson Liberation" & data$treatment != "Release of POWs", "keep"]
-t_test_result <- t.test(pos_keep, neg_keep)
-print(t_test_result)
+t_test_result_keep <- t.test(pos_keep, neg_keep)
+t_test_result_keep
 
 #Defence cause
 pos_defence <- data[data$treatment != "Drama Theater" & data$treatment != "Ukraine Shelling", "defence"]
 neg_defence <- data[data$treatment != "Kherson Liberation" & data$treatment != "Release of POWs", "defence"]
-t_test_result <- t.test(pos_defence, neg_defence)
-print(t_test_result)
+t_test_result_defence <- t.test(pos_defence, neg_defence)
+t_test_result_defence
 
 #Humanitarian help cause
 pos_humanitarian <- data[data$treatment != "Drama Theater" & data$treatment != "Ukraine Shelling", "humanitarian"]
 neg_humanitarian <- data[data$treatment != "Kherson Liberation" & data$treatment != "Release of POWs", "humanitarian"]
-t_test_result <- t.test(pos_humanitarian, neg_humanitarian)
-print(t_test_result)
+t_test_result_humanitarian <- t.test(pos_humanitarian, neg_humanitarian)
+t_test_result_humanitarian
 ```
 
-Cmparison of donations to each cause under *high-energy vs low-energy treatments*
+Comparison of donations to each cause under high-energy vs low-energy treatments
 ```{r}
 #Rebuilding cause
 low_rebuilding <- data[data$treatment != "Kherson Liberation" & data$treatment != "Ukraine Shelling", "rebuilding"]
 high_rebuilding <- data[data$treatment != "Drama Theater" & data$treatment != "Release of POWs", "rebuilding"]
 t_test_result <- t.test(low_rebuilding, high_rebuilding)
-print(t_test_result)
+t_test_result
 
 #Humanitarian help cause
 low_humanitarian <- data[data$treatment != "Kherson Liberation" & data$treatment != "Ukraine Shelling", "humanitarian"]
 high_humanitarian <- data[data$treatment != "Drama Theater" & data$treatment != "Release of POWs", "humanitarian"]
 t_test_result <- t.test(low_humanitarian, high_humanitarian)
-print(t_test_result)
+t_test_result
 
 #Keep money to yourself option
 low_keep <- data[data$treatment != "Kherson Liberation" & data$treatment != "Ukraine Shelling", "keep"]
 high_keep <- data[data$treatment != "Drama Theater" & data$treatment != "Release of POWs", "keep"]
 t_test_result <- t.test(low_keep, high_keep)
-print(t_test_result)
+t_test_result
 
 #Defence cause
 low_defence <- data[data$treatment != "Kherson Liberation" & data$treatment != "Ukraine Shelling", "defence"]
 high_defence <- data[data$treatment != "Drama Theater" & data$treatment != "Release of POWs", "defence"]
 t_test_result <- t.test(low_defence, high_defence)
-print(t_test_result)
+t_test_result
 ```
 
-Comparison of donations to certain cause under *each treatment vs three other treatments*
+Comparison of donations to certain cause under each treatment vs three other treatments
 ```{r}
 # Release of POWs treatment vs other treatments
 #####
 pows_defence <- data[data$treatment == "Release of POWs", "defence"]
 other_defence <- data[data$treatment != "Release of POWs", "defence"]
 t_test_result <- t.test(pows_defence, other_defence)
-print(t_test_result)
+t_test_result
 
 pows_keep <- data[data$treatment == "Release of POWs", "keep"]
 other_keep <- data[data$treatment != "Release of POWs", "keep"]
 t_test_result <- t.test(pows_keep, other_keep)
-print(t_test_result)
+t_test_result
 
 pows_humanitarian <- data[data$treatment == "Release of POWs", "humanitarian"]
 other_humanitarian <- data[data$treatment != "Release of POWs", "humanitarian"]
 t_test_result <- t.test(pows_humanitarian, other_humanitarian)
-print(t_test_result)
+t_test_result
 
 pows_rebuilding <- data[data$treatment == "Release of POWs", "rebuilding"]
 other_rebuilding <- data[data$treatment != "Release of POWs", "rebuilding"]
 t_test_result <- t.test(pows_rebuilding, other_rebuilding)
-print(t_test_result)
+t_test_result
 #####
 
 # Drama theater treatment vs other treatments
@@ -128,22 +128,22 @@ print(t_test_result)
 theater_rebuilding <- data[data$treatment == "Drama Theater", "rebuilding"]
 other_rebuilding <- data[data$treatment != "Drama Theater", "rebuilding"]
 t_test_result <- t.test(theater_rebuilding, other_rebuilding)
-print(t_test_result)
+t_test_result
 
 theater_humanitarian <- data[data$treatment == "Drama Theater", "humanitarian"]
 other_humanitarian <- data[data$treatment != "Drama Theater", "humanitarian"]
 t_test_result <- t.test(theater_humanitarian, other_humanitarian)
-print(t_test_result)
+t_test_result
 
 theater_keep <- data[data$treatment == "Drama Theater", "keep"]
 other_keep <- data[data$treatment != "Drama Theater", "keep"]
 t_test_result <- t.test(theater_keep, other_keep)
-print(t_test_result)
+t_test_result
 
 theater_defence <- data[data$treatment == "Drama Theater", "defence"]
 other_defence <- data[data$treatment != "Drama Theater", "defence"]
 t_test_result <- t.test(theater_defence, other_defence)
-print(t_test_result)
+t_test_result
 #####
 
 # Ukraine shelling treatment vs other treatments
@@ -151,22 +151,22 @@ print(t_test_result)
 shelling_defence <- data[data$treatment == "Ukraine Shelling", "defence"]
 other_defence <- data[data$treatment != "Ukraine Shelling", "defence"]
 t_test_result <- t.test(shelling_defence, other_defence)
-print(t_test_result)
+t_test_result
 
 shelling_keep <- data[data$treatment == "Ukraine Shelling", "keep"]
 other_keep <- data[data$treatment != "Ukraine Shelling", "keep"]
 t_test_result <- t.test(shelling_keep, other_keep)
-print(t_test_result)
+t_test_result
 
 shelling_humanitarian <- data[data$treatment == "Ukraine Shelling", "humanitarian"]
 other_humanitarian <- data[data$treatment != "Ukraine Shelling", "humanitarian"]
 t_test_result <- t.test(shelling_humanitarian, other_humanitarian)
-print(t_test_result)
+t_test_result
 
 shelling_rebuilding <- data[data$treatment == "Ukraine Shelling", "rebuilding"]
 other_rebuilding <- data[data$treatment != "Ukraine Shelling", "rebuilding"]
 t_test_result <- t.test(shelling_rebuilding, other_rebuilding)
-print(t_test_result)
+t_test_result
 #####
 
 # Kherson Liberation treatment vs other treatments
@@ -174,26 +174,26 @@ print(t_test_result)
 kherson_defence <- data[data$treatment == "Kherson Liberation", "defence"]
 other_defence <- data[data$treatment != "Kherson Liberation", "defence"]
 t_test_result <- t.test(kherson_defence, other_defence)
-print(t_test_result)
+t_test_result
 
 kherson_keep <- data[data$treatment == "Kherson Liberation", "keep"]
 other_keep <- data[data$treatment != "Kherson Liberation", "keep"]
 t_test_result <- t.test(kherson_keep, other_keep)
-print(t_test_result)
+t_test_result
 
 kherson_humanitarian <- data[data$treatment == "Kherson Liberation", "humanitarian"]
 other_humanitarian <- data[data$treatment != "Kherson Liberation", "humanitarian"]
 t_test_result <- t.test(kherson_humanitarian, other_humanitarian)
-print(t_test_result)
+t_test_result
 
 kherson_rebuilding <- data[data$treatment == "Kherson Liberation", "rebuilding"]
 other_rebuilding <- data[data$treatment != "Kherson Liberation", "rebuilding"]
 t_test_result <- t.test(kherson_rebuilding, other_rebuilding)
-print(t_test_result)
+t_test_result
 #####
 ```
 
-Comparison of donations to each cause for subset of *Ukrainians vs subset of non-Ukrainians*
+Comparison of donations to each cause for subset of Ukrainians vs subset of non-Ukrainians
 ```{r}
 #Country_origin
 #####
@@ -201,25 +201,25 @@ Comparison of donations to each cause for subset of *Ukrainians vs subset of non
 ukr_defence <- data[data$country_origin_Ukraine == "1", "defence"]
 non_ukr_defence <- data[data$country_origin_Ukraine == "0", "defence"]
 t_test_result <- t.test(ukr_defence, non_ukr_defence)
-print(t_test_result)
+t_test_result
 
 #Humanitarian help cause
 ukr_humanitarian <- data[data$country_origin_Ukraine == "1", "humanitarian"]
 non_ukr_humanitarian <- data[data$country_origin_Ukraine == "0", "humanitarian"]
 t_test_result <- t.test(ukr_humanitarian, non_ukr_humanitarian)
-print(t_test_result)
+t_test_result
 
 #Rebuilding cause
 ukr_rebuilding <- data[data$country_origin_Ukraine == "1", "rebuilding"]
 non_ukr_rebuilding <- data[data$country_origin_Ukraine == "0", "rebuilding"]
 t_test_result <- t.test(ukr_rebuilding, non_ukr_rebuilding)
-print(t_test_result)
+t_test_result
 
 #Keep money for yourself option
 ukr_keep <- data[data$country_origin_Ukraine == "1", "keep"]
 non_ukr_keep <- data[data$country_origin_Ukraine == "0", "keep"]
 t_test_result <- t.test(ukr_keep, non_ukr_keep)
-print(t_test_result)
+t_test_result
 #####
 
 #Country_live
@@ -229,58 +229,227 @@ print(t_test_result)
 ukr_defence <- data[data$country_live_Ukraine == "1", "defence"]
 non_ukr_defence <- data[data$country_live_Ukraine == "0", "defence"]
 t_test_result <- t.test(ukr_defence, non_ukr_defence)
-print(t_test_result)
+t_test_result
 
 #Humanitarian help cause
 ukr_humanitarian <- data[data$country_live_Ukraine == "1", "humanitarian"]
 non_ukr_humanitarian <- data[data$country_live_Ukraine == "0", "humanitarian"]
 t_test_result <- t.test(ukr_humanitarian, non_ukr_humanitarian)
-print(t_test_result)
+t_test_result
 
 #Rebuilding cause
 ukr_rebuilding <- data[data$country_live_Ukraine == "1", "rebuilding"]
 non_ukr_rebuilding <- data[data$country_live_Ukraine == "0", "rebuilding"]
 t_test_result <- t.test(ukr_rebuilding, non_ukr_rebuilding)
-print(t_test_result)
+t_test_result
 
 #Keep money for yourself option
 ukr_keep <- data[data$country_live_Ukraine == "1", "keep"]
 non_ukr_keep <- data[data$country_live_Ukraine == "0", "keep"]
 t_test_result <- t.test(ukr_keep, non_ukr_keep)
-print(t_test_result)
+t_test_result
 #####
 ```
 
-Comparison of donations to each cause for subset of *females versus subset of males*
+Comparison of donations to each cause for subset of females versus subset of males
 ```{r}
 #Defence cause
 female_defence <- data[data$gender == "female", "defence"]
 male_defence <- data[data$gender == "male", "defence"]
 t_test_result <- t.test(female_defence, male_defence)
-print(t_test_result)
+t_test_result
 
 #Humanitarian help cause
 female_humanitarian <- data[data$gender == "female", "humanitarian"]
 male_humanitarian <- data[data$gender == "male", "humanitarian"]
 t_test_result <- t.test(female_humanitarian, male_humanitarian)
-print(t_test_result)
+t_test_result
 
 #Rebuilding cause
 female_rebuilding <- data[data$gender == "female", "rebuilding"]
 male_rebuilding <- data[data$gender == "male", "rebuilding"]
 t_test_result <- t.test(female_rebuilding, male_rebuilding)
-print(t_test_result)
+t_test_result
 
 #Keep money for yourself option
 female_keep <- data[data$gender == "female", "keep"]
 male_keep <- data[data$gender == "male", "keep"]
 t_test_result <- t.test(female_keep, male_keep)
-print(t_test_result)
+t_test_result
 
 ```
 
 *OLS Regressions*
-# Doing ANOVA to see if there is effect of treatment on induced emotions
-anova_result <- aov(anger + fear + joy + sadness + disgust + relief ~ treatment, data = data)
-summary(anova_result)
+
+OLS Regressions for emotions influence on donation amounts to each cause 
+```{r}
+#Not including treatment
+#####
+model_keep <- lm(keep ~ joy + relief + anger + fear + sadness + disgust + age + gender + country_origin_Ukraine, data = data)
+summary(model_keep)
+
+model_hum <- lm(humanitarian ~ joy + relief + anger + fear + sadness + disgust + age + gender + country_origin_Ukraine, data = data)
+summary(model_hum)
+
+model_def <- lm(defence ~ joy + relief + anger + fear + sadness + disgust + age + gender + country_origin_Ukraine, data = data)
+summary(model_def)
+
+model_reb <- lm(rebuilding ~ joy + relief + anger + fear + sadness + disgust + age + gender + country_origin_Ukraine, data = data)
+summary(model_reb)
+#####
+
+#Including treatment
+#####
+model_keep_tr <- lm(keep ~ treatment + joy + relief + anger + fear + sadness + disgust + age + gender + country_origin_Ukraine, data = data)
+summary(model_keep_tr)
+
+model_hum_tr <- lm(humanitarian ~ treatment + joy + relief + anger + fear + sadness + disgust + age + gender + country_origin_Ukraine, data = data)
+summary(model_hum_tr)
+
+model_def_tr <- lm(defence ~ treatment + joy + relief + anger + fear + sadness + disgust + age + gender + country_origin_Ukraine, data = data)
+summary(model_def_tr)
+
+model_reb_tr <- lm(rebuilding ~ treatment + joy + relief + anger + fear + sadness + disgust + age + gender + country_origin_Ukraine, data = data)
+summary(model_reb_tr)
+#####
+```
+
+OLS Regressions for treatment influence on donation amounts to each cause 
+```{r}
+#Setting Drama Theater as reference category
+data$treatment <- factor(data$treatment)
+data$treatment <- relevel(data$treatment, ref = "Drama Theater")
+
+model_keep<- lm(keep ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_keep)
+
+model_hum <- lm(humanitarian ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_hum)
+
+model_def <- lm(defence ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_def)
+
+model_reb <- lm(rebuilding ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_reb)
+
+#Testing other reference categories
+
+#Ukraine Shelling as a reference category
+#####
+data$treatment <- factor(data$treatment)
+data$treatment <- relevel(data$treatment, ref = "Ukraine Shelling")
+
+model_keep_3 <- lm(keep ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_keep_3)
+
+model_hum_3 <- lm(humanitarian ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_hum_3)
+
+model_def_3 <- lm(defence ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_def_3)
+
+model_reb_3 <- lm(rebuilding ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_reb_3)
+#####
+
+#Release of POWs as a reference category
+#####
+data$treatment <- factor(data$treatment)
+data$treatment <- relevel(data$treatment, ref = "Release of POWs")
+
+model_keep_4 <- lm(keep ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_keep_4)
+
+model_hum_4 <- lm(humanitarian ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_hum_4)
+
+model_def_4 <- lm(defence ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_def_4)
+
+model_reb_4 <- lm(rebuilding ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_reb_4)
+#####
+
+#Kherson Liberation as a reference category
+#####
+data$treatment <- factor(data$treatment)
+data$treatment <- relevel(data$treatment, ref = "Kherson Liberation")
+
+model_keep_5 <- lm(keep ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_keep_5)
+
+model_hum_5 <- lm(humanitarian ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_hum_5)
+
+model_def_5 <- lm(defence ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_def_5)
+
+model_reb_5 <- lm(rebuilding ~ treatment + age + gender + country_origin_Ukraine, data = data)
+summary(model_reb_5)
+#####
+```
+
+
+*Correlation analysis*
+```{r}
+# Kherson liberation treatment: donations to rebuilding + humanitarian causes and joy
+#####
+# Calculate the average donations to rebuilding and humanitarian aid causes per subject
+kherson_data <- data[data$treatment == "Kherson Liberation", ]
+kherson_data$avg_donations_3 <- rowMeans(kherson_data[, c("rebuilding","humanitarian")])
+
+# Calculate the correlation coefficient between "joy" and average donations
+correlation_kherson <- cor(kherson_data$joy, kherson_data$avg_donations)
+correlation_kherson
+cor.test(kherson_data$joy, kherson_data$avg_donations)$p.value
+#####
+
+# Ukraine Shelling treatment: donations to defense cause and fear, anger
+#####
+#Fear
+# Calculate the average donations to defense cause per subject
+shelling_data <- data[data$treatment == "Ukraine Shelling", ]
+shelling_data$avg_donations <- rowMeans(shelling_data[, c("defence")])
+
+# Calculate the correlation coefficient between "fear" and average donations
+correlation_shelling <- cor(shelling_data$fear, shelling_data$avg_donations)
+correlation_shelling
+cor.test(shelling_data$fear, shelling_data$avg_donations)$p.value
+
+#Anger
+correlation_shelling_ang <- cor(shelling_data$anger, shelling_data$avg_donations)
+print(correlation_shelling_ang)
+cor.test(shelling_data$anger, shelling_data$avg_donations)$p.value
+#####
+
+# Release POWs treatment: donations to rebuilding + humanitarian and relief
+#####
+# Calculate the average donations to rebuilding, medical, and humanitarian aid causes per subject
+POWs_data <- data[data$treatment == "Release of POWs", ]
+POWs_data$avg_donations <- rowMeans(POWs_data[, c("rebuilding", "humanitarian")])
+
+# Calculate the correlation coefficient between "relief" and average donations
+correlation_POWs <- cor(POWs_data$relief, POWs_data$avg_donations)
+print (correlation_POWs)
+cor.test(POWs_data$relief, POWs_data$avg_donations)$p.value
+#####
+
+# Drama theater treatment: donations to defence and sadness, disgust
+#####
+# Sadness
+mariupol_data <- data[data$treatment == "Drama Theater", ]
+
+# Calculate the correlation coefficient between the average of sadness & disgust and average donations
+correlation_mariupol <- cor(mariupol_data$sadness, mariupol_data$defence)
+print(correlation_mariupol)
+cor.test(mariupol_data$sadness, mariupol_data$defence)$p.value
+
+#Disgust
+correlation_mariupol_dis <- cor(mariupol_data$disgust, mariupol_data$defence)
+print(correlation_mariupol_dis)
+cor.test(mariupol_data$disgust, mariupol_data$defence)$p.value
+#####
+```
+
+*Pairwise t-tests*
 
