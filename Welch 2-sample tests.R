@@ -6,8 +6,6 @@ install.packages("tidyverse")  # Install the tidyverse package
 library(tidyverse)             # Load the tidyverse package
 install.packages("magrittr")  # Install the magrittr package
 library(magrittr)             # Load the magrittr package
-install.packages("dplyr")  # Install the magrittr package
-library(dplyr)  
 install.packages("tidyr")  # Install the magrittr package
 library(tidyr)  
 install.packages("nnet")  # Install the nnet package
