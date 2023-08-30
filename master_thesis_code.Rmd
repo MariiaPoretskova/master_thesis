@@ -33,16 +33,9 @@ Summary statistics
 
 summary_data <- summary(data)
 summary_data
-
-gender_table <- table(data$gender)
-gender_table
-
-gender_percentages <- prop.table(gender_table)
-gender_percentages
-
 ```
 
-*Welch's two-sample t-tests:*
+*Welch's two-sample t-tests to compare donation amounts and causes within different subsets*
 
 Comparison of donations to each cause under positive vs negative treatments
 ```{r}
@@ -279,7 +272,7 @@ t_test_result
 
 ```
 
-*OLS Regressions*
+*OLS Regressions for emotions influence on donations and treatment influence*
 
 OLS Regressions for emotions influence on donation amounts to each cause 
 ```{r}
@@ -390,7 +383,7 @@ summary(model_reb_5)
 ```
 
 
-*Correlation analysis*
+*Correlation analysis to assess the effect of treatment on donation cause*
 ```{r}
 # Kherson liberation treatment: donations to rebuilding + humanitarian causes and joy
 #####
@@ -451,5 +444,149 @@ cor.test(mariupol_data$disgust, mariupol_data$defence)$p.value
 #####
 ```
 
-*Pairwise t-tests*
+*Pairwise t-tests to assess target emotions induction*
+```{r}
+#Checking if each treatment's target emotion rate is higher than other non-target emotions  rates. Bonferroni correction is applied.
+
+# Function to apply Bonferroni correction
+apply_bonferroni_correction <- function(p_value, num_tests) {
+  adjusted_p_value <- p_value * num_tests
+  return(pmin(adjusted_p_value, 1)) 
+}
+num_tests_per_treatment <- 10
+
+#Kherson liberation treatment
+#####
+#Checking if target emotion 'joy' is higher than other emotions in Kherson liberation treatment
+# Perform t-tests for each emotion comparing 'joy' with the other emotions
+kherson_data <- data[data$treatment == "Kherson Liberation", ]
+
+emotions <- c("anger", "fear", "sadness", "disgust", "relief")
+t_test_results <- lapply(emotions, function(emotion) {
+  t_test <- t.test(kherson_data$joy, kherson_data[[emotion]])
+  t_test$p.value <- apply_bonferroni_correction(t_test$p.value, num_tests_per_treatment)
+  return(t_test)
+})
+# Extract and print the results
+for (i in seq_along(emotions)) {
+  emotion <- emotions[i]
+  t_test <- t_test_results[[i]]
+  cat("Comparison for", emotion, "vs. joy in the Kherson liberation treatment:\n")
+  cat("t-value:", t_test$statistic, "\n")
+  cat("p-value (Bonferroni adjusted):", t_test$p.value, "\n")
+  cat("------------------------------\n")
+}
+#####
+
+#Release of POWs treatment
+#####
+#Checking if target emotion 'relief' is higher in Release of POWs than other emotions
+POWs_data <- data[data$treatment == "Release of POWs", ]
+
+emotions <- c("anger", "fear", "sadness", "disgust", "joy")
+t_test_results <- lapply(emotions, function(emotion) {
+  t_test <- t.test(POWs_data$relief, POWs_data[[emotion]])
+  t_test$p.value <- apply_bonferroni_correction(t_test$p.value, num_tests_per_treatment)
+  return(t_test)
+})
+
+# Extract and print the results
+for (i in seq_along(emotions)) {
+  emotion <- emotions[i]
+  t_test <- t_test_results[[i]]
+  cat("Comparison for", emotion, "vs. relief in the Release of POWs treatment:\n")
+  cat("t-value:", t_test$statistic, "\n")
+  cat("p-value (Bonferroni adjusted):", t_test$p.value, "\n")
+  cat("------------------------------\n")
+}
+#####
+
+#Drama theater treatment
+#####
+#Checking if target emotion 'sadness' is higher in Drama Theater than other emotions
+Theater_data <- data[data$treatment == "Drama Theater", ]
+
+# Perform t-tests for each emotion comparing 'sadness' with the other emotions
+emotions <- c("anger", "fear", "relief", "disgust", "joy")
+t_test_results <- lapply(emotions, function(emotion) {
+  t_test <- t.test(Theater_data$sadness, Theater_data[[emotion]])
+  t_test$p.value <- apply_bonferroni_correction(t_test$p.value, num_tests_per_treatment)
+  return(t_test)
+})
+
+# Extract and print the results
+for (i in seq_along(emotions)) {
+  emotion <- emotions[i]
+  t_test <- t_test_results[[i]]
+  cat("Comparison for", emotion, "vs. sadness in the Drama Theater treatment:\n")
+  cat("t-value:", t_test$statistic, "\n")
+  cat("p-value (Bonferroni adjusted):", t_test$p.value, "\n")
+  cat("------------------------------\n")
+}
+
+#Checking if target emotion 'disgust' is higher in Drama Theater than other emotions
+# Perform t-tests for each emotion comparing 'disgust' with the other emotions
+emotions <- c("anger", "fear", "relief", "sadness", "joy")
+t_test_results <- lapply(emotions, function(emotion) {
+  t_test <- t.test(Theater_data$disgust, Theater_data[[emotion]])
+  t_test$p.value <- apply_bonferroni_correction(t_test$p.value, num_tests_per_treatment)
+  return(t_test)
+})
+
+# Extract and print the results
+for (i in seq_along(emotions)) {
+  emotion <- emotions[i]
+  t_test <- t_test_results[[i]]
+  cat("Comparison for", emotion, "vs. disgust in the Drama Theater treatment:\n")
+  cat("t-value:", t_test$statistic, "\n")
+  cat("p-value (Bonferroni adjusted):", t_test$p.value, "\n")
+  cat("------------------------------\n")
+}
+
+#####
+
+#Ukraine shelling treatment
+#####
+
+#Checking if target emotion 'anger' is higher in Ukraine Shelling than other emotions
+Shelling_data <- data[data$treatment == "Ukraine Shelling", ]
+
+# Perform t-tests for each emotion comparing 'anger' with the other emotions
+emotions <- c("sadness", "fear", "relief", "disgust", "joy")
+t_test_results <- lapply(emotions, function(emotion) {
+  t_test <- t.test(Shelling_data$anger, Shelling_data[[emotion]])
+  t_test$p.value <- apply_bonferroni_correction(t_test$p.value, num_tests_per_treatment)
+  return(t_test)
+})
+
+# Extract and print the results
+for (i in seq_along(emotions)) {
+  emotion <- emotions[i]
+  t_test <- t_test_results[[i]]
+  cat("Comparison for", emotion, "vs. anger in the Ukraine Shelling treatment:\n")
+  cat("t-value:", t_test$statistic, "\n")
+  cat("p-value (Bonferroni adjusted):", t_test$p.value, "\n")
+  cat("------------------------------\n")
+}
+
+#Checking if target emotion 'fear' is higher in Ukraine Shelling than other emotions
+# Perform t-tests for each emotion comparing 'fear' with the other emotions
+emotions <- c("sadness", "anger", "relief", "disgust", "joy")
+t_test_results <- lapply(emotions, function(emotion) {
+  t_test <- t.test(Shelling_data$fear, Shelling_data[[emotion]])
+  t_test$p.value <- apply_bonferroni_correction(t_test$p.value, num_tests_per_treatment)
+  return(t_test)
+})
+
+# Extract and print the results
+for (i in seq_along(emotions)) {
+  emotion <- emotions[i]
+  t_test <- t_test_results[[i]]
+  cat("Comparison for", emotion, "vs. fear in the Ukraine Shelling treatment:\n")
+  cat("t-value:", t_test$statistic, "\n")
+  cat("p-value (Bonferroni adjusted):", t_test$p.value, "\n")
+  cat("------------------------------\n")
+}
+```
+
 
